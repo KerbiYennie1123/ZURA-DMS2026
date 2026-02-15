@@ -1,0 +1,2872 @@
+<!DOCTYPE html>
+<html lang="en" class="light-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZURA | Project Documentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link rel="icon" href="/zura/global/zura.ico" type="image/x-icon">
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { darkMode: true, primaryColor: '#c5a059', lineColor: '#f3f4f6' } });
+    </script>
+
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --sidebar-bg: #111827;
+            --card-bg: #1a202c;
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --text-headings: #ffffff;
+            --border-color: #2d3748;
+            --accent-gold: #c5a059;
+            --accent-gold-hover: #d4b06a;
+            --accent-gold-faded: rgba(197, 160, 89, 0.1);
+            --code-bg: #0f131a;
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.05);
+        }
+
+        html.light-mode {
+            --bg-color: #f9fafb;
+            --sidebar-bg: #ffffff;
+            --card-bg: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-headings: #111827;
+            --border-color: #e2e8f0;
+            --accent-gold: #b08d55;
+            --accent-gold-hover: #967642;
+            --code-bg: #f3f4f6;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+            --glass-border: rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--border-color);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: var(--accent-gold);
+        }
+
+        ::selection {
+            background-color: var(--accent-gold);
+            color: var(--bg-color);
+        }
+
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .sidebar {
+            width: 280px;
+            position: sticky;
+            top: 40px;
+            height: calc(100vh - 80px);
+            display: flex;
+            flex-direction: column;
+            background: var(--sidebar-bg);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px var(--shadow-color);
+            margin-right: 40px;
+        }
+
+        .sidebar-header {
+            font-family: 'Sora', sans-serif;
+            font-size: 2.2rem;
+            color: var(--text-headings);
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
+        }
+        .sidebar-header span {
+            color: var(--accent-gold);
+        }
+        .sidebar-subheader {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            transition: all 0.2s;
+        }
+        #searchInput:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 2px var(--accent-gold-faded);
+        }
+
+        .sidebar nav {
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 12px 15px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar nav a:hover {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+        }
+
+        .sidebar nav a.active {
+            background-color: var(--accent-gold);
+            color: #ffffff;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(197, 160, 89, 0.3);
+        }
+
+        .theme-toggle {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        .switch input { display: none; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--border-color);
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--accent-gold); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .content h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 2.5rem;
+            color: var(--text-headings);
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            scroll-margin-top: 40px;
+        }
+
+        details {
+            background-color: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.5s forwards;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        details[open] {
+            box-shadow: 0 20px 40px -10px var(--shadow-color);
+            border-color: var(--accent-gold-faded);
+        }
+
+        summary {
+            padding: 20px 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-headings);
+        }
+        summary::-webkit-details-marker { display: none; }
+        
+        summary .summary-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        summary::after {
+            content: 'expand_more';
+            font-family: 'Material Icons Outlined';
+            font-size: 24px;
+            color: var(--text-secondary);
+            transition: transform 0.3s ease;
+        }
+
+        details[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .details-content {
+            padding: 0 25px 25px;
+            border-top: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.1);
+        }
+
+        .details-content p, .details-content ul {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        .details-content ul {
+            padding-left: 20px;
+        }
+
+        .details-content strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'SF Mono', 'Fira Code', 'Source Code Pro', monospace;
+            font-size: 0.85rem;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--border-color);
+            border: none;
+            color: var(--text-secondary);
+            padding: 5px 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.8rem;
+        }
+
+        pre:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-gold);
+            color: var(--bg-color);
+        }
+
+        code .code-comment { color: #6a9955; }
+        code .code-keyword { color: #569cd6; }
+        code .code-string { color: #ce9178; }
+        code .code-function { color: #dcdcaa; }
+        code .code-variable { color: #9cdcfe; }
+        code .code-number { color: #b5cea8; }
+
+        .material-icons-outlined {
+            vertical-align: middle;
+        }
+
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .info-card h3 {
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .team-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .team-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--accent-gold);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+        .download-btn {
+            width: 100%; padding: 12px; background: var(--accent-gold); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.3s;
+        }
+        .download-btn:hover { background: var(--accent-gold-hover); }
+        
+        .mermaid {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .media-container {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--accent-gold);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            margin: 25px 0;
+        }
+        .media-container img, .media-container video {
+            width: 100%;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        .media-container:hover img, .media-container:hover video {
+            transform: scale(1.02);
+        }
+        .media-caption {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(11, 15, 25, 0.85);
+            color: var(--accent-gold);
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(8px);
+            border-top: 1px solid var(--accent-gold-faded);
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 0.5px;
+        }
+
+        @media print {
+            .sidebar, .theme-toggle, .copy-btn, summary::after, #searchInput { display: none !important; }
+            .container { display: block; width: 100%; max-width: 100%; padding: 0; margin: 0; }
+            .content { margin: 0; width: 100%; }
+            details { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; opacity: 1; transform: none; display: block !important; margin-bottom: 20px; }
+            details[open] { box-shadow: none; }
+            summary { pointer-events: none; font-weight: bold; border-bottom: 1px solid #eee; margin-bottom: 10px; padding-bottom: 10px; }
+            .details-content { display: block !important; padding: 0 15px 15px; background: transparent; border: none; }
+            body { background: white; color: black; font-size: 12pt; }
+            h2 { border-bottom: 2px solid #000; color: black; margin-top: 30px; }
+            a { text-decoration: none; color: black; }
+            pre { background: #f5f5f5; border: 1px solid #ddd; white-space: pre-wrap; color: black; }
+            code { color: black; }
+            .info-card, .team-card { border: 1px solid #ddd; break-inside: avoid; background: white; color: black; }
+            .info-card h3 { color: black; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+            .team-avatar { background: #ddd; color: black; -webkit-print-color-adjust: exact; }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+                margin-bottom: 30px;
+            }
+        }
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin: 30px 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 5px;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-color);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        .timeline-marker {
+            position: absolute;
+            left: -29px;
+            top: 20px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            border: 3px solid var(--card-bg);
+            z-index: 1;
+        }
+        .timeline-item details {
+            margin-bottom: 0;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-color);
+        }
+        .timeline-item details[open] {
+            border-color: var(--accent-gold);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .time-badge {
+            font-family: 'SF Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+            background: var(--bg-color);
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        details[open] .details-content {
+            animation: slideDown 0.3s ease-out;
+        }
+        .timeline-item {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.5s forwards;
+        }
+        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+
+        .version-tag {
+            background: var(--accent-gold);
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 10px;
+            vertical-align: middle;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+
+        #team-progress { padding: 50px 20px; background: #111827; color: #f5f5f5; text-align: center; }
+#team-progress h2 { font-size: 2.5rem; margin-bottom: 20px; color: #c5a059; }
+.toggle-btn { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding: 10px 20px; background: #c5a059; border: none; border-radius: 10px; cursor: pointer; color: #111827; font-weight: bold; transition: 0.3s; }
+.toggle-btn:hover { background: #e0b84a; }
+.upload-container { display: none; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 40px; }
+.upload-container input, .upload-container textarea { width: 300px; padding: 10px; border-radius: 10px; border: 1px solid #888; background: #1f2937; color: #f5f5f5; }
+.upload-container textarea { resize: vertical; height: 80px; }
+.upload-container button { padding: 10px 20px; border: none; border-radius: 10px; background: #c5a059; color: #111827; font-weight: bold; cursor: pointer; transition: 0.3s; }
+.upload-container button:hover { background: #e0b84a; }
+
+.team-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+.team-item { position: relative; overflow: hidden; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.6); transition: transform 0.3s ease, box-shadow 0.3s ease; background: #1f2937; }
+.team-item img { width: 100%; height: auto; display: block; transition: transform 0.5s ease; }
+.team-item:hover img { transform: scale(1.05); }
+.overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 10px; background: rgba(20,20,20,0.85); color: #c5a059; font-size: 1rem; text-align: left; max-height: 100%; overflow-y: auto; }
+.item-controls { position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; }
+.item-controls button { padding: 5px 10px; border: none; border-radius: 8px; font-size: 0.9rem; cursor: pointer; background: rgba(197,160,89,0.9); color: #111827; transition: 0.2s; }
+.item-controls button:hover { background: #e0b84a; }
+
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+.modal-content { background: #1f2937; padding: 20px; border-radius: 15px; width: 90%; max-width: 500px; color: #f5f5f5; display: flex; flex-direction: column; gap: 15px; }
+.modal-content textarea { width: 100%; height: 150px; border-radius: 10px; border: 1px solid #888; padding: 10px; background: #111827; color: #f5f5f5; resize: vertical; }
+.modal-buttons { display: flex; justify-content: flex-end; gap: 10px; }
+.modal-buttons button { padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; }
+#saveEditBtn { background: #c5a059; color: #111827; }
+#saveEditBtn:hover { background: #e0b84a; }
+#cancelEditBtn { background: #888; color: #f5f5f5; }
+#cancelEditBtn:hover { background: #aaa; }
+
+.team-grid {display:flex; flex-wrap:wrap; gap:20px;}
+.team-card {width:180px; text-align:center; position:relative;}
+.team-avatar {width:100px; height:100px; border-radius:50%; background:#c5a059; color:#111; display:flex; align-items:center; justify-content:center; font-size:2rem; margin:auto; overflow:hidden; cursor:pointer; position:relative;}
+.team-avatar img {width:100%; height:100%; object-fit:cover;}
+.avatar-upload {display:none;}
+.avatar-delete {position:absolute; top:-8px; right:-8px; background:#e74c3c; color:#fff; border:none; border-radius:50%; width:22px; height:22px; font-size:14px; display:none; cursor:pointer;}
+.team-card:hover .avatar-delete {display:block;}
+
+/* Immersive 2026 UI refresh */
+:root {
+    --bg-color: #151c2d;
+    --sidebar-bg: rgba(21, 30, 47, 0.84);
+    --card-bg: rgba(20, 28, 44, 0.84);
+    --text-primary: #eef2f9;
+    --text-secondary: #d7e0ef;
+    --text-headings: #f8fbff;
+    --border-color: rgba(157, 170, 192, 0.28);
+    --accent-gold: #c4a06a;
+    --accent-gold-hover: #d2b382;
+    --accent-gold-faded: rgba(196, 160, 106, 0.24);
+    --code-bg: rgba(12, 18, 31, 0.86);
+    --shadow-color: rgba(6, 12, 25, 0.52);
+    --glass-border: rgba(157, 170, 192, 0.24);
+    --surface-panel-start: rgba(22, 32, 52, 0.92);
+    --surface-panel-end: rgba(14, 22, 39, 0.86);
+    --surface-section-start: rgba(20, 30, 48, 0.9);
+    --surface-section-end: rgba(12, 19, 35, 0.82);
+    --surface-card-start: rgba(255, 255, 255, 0.06);
+    --surface-card-end: rgba(255, 255, 255, 0.015);
+    --input-bg: rgba(23, 32, 50, 0.82);
+    --details-bg: rgba(10, 17, 31, 0.5);
+    --pastel-1: rgba(148, 191, 255, 0.22);
+    --pastel-2: rgba(255, 200, 221, 0.18);
+    --pastel-3: rgba(196, 160, 106, 0.2);
+    --font-ui: "Manrope", sans-serif;
+    --font-display: "Sora", sans-serif;
+    --font-editorial: "Cormorant Garamond", serif;
+}
+
+html.light-mode {
+    --bg-color: #f6f8fc;
+    --sidebar-bg: rgba(255, 255, 255, 0.9);
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --text-primary: #0f172a;
+    --text-secondary: #24324a;
+    --text-headings: #0b1324;
+    --border-color: rgba(100, 116, 139, 0.24);
+    --accent-gold: #9a753f;
+    --accent-gold-hover: #7f5f31;
+    --accent-gold-faded: rgba(154, 117, 63, 0.2);
+    --code-bg: rgba(240, 244, 252, 0.92);
+    --shadow-color: rgba(15, 23, 42, 0.1);
+    --glass-border: rgba(148, 163, 184, 0.25);
+    --surface-panel-start: rgba(255, 255, 255, 0.98);
+    --surface-panel-end: rgba(242, 248, 255, 0.94);
+    --surface-section-start: rgba(255, 255, 255, 0.98);
+    --surface-section-end: rgba(245, 250, 255, 0.93);
+    --surface-card-start: rgba(255, 255, 255, 0.92);
+    --surface-card-end: rgba(247, 251, 255, 0.84);
+    --input-bg: rgba(255, 255, 255, 0.96);
+    --details-bg: rgba(245, 249, 255, 0.86);
+    --pastel-1: rgba(176, 214, 255, 0.34);
+    --pastel-2: rgba(255, 208, 225, 0.28);
+    --pastel-3: rgba(241, 211, 168, 0.3);
+}
+
+body {
+    font-family: var(--font-ui);
+    position: relative;
+    overflow-x: hidden;
+    background:
+        radial-gradient(1000px 620px at -5% -10%, rgba(103, 124, 156, 0.2), transparent 60%),
+        radial-gradient(900px 540px at 115% 5%, rgba(196, 160, 106, 0.18), transparent 58%),
+        radial-gradient(700px 520px at 50% 115%, rgba(118, 132, 155, 0.12), transparent 62%),
+        var(--bg-color);
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(circle at 50% 35%, #000 35%, transparent 82%);
+}
+
+.ambient-orbs {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.ambient-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(2px);
+    opacity: 0.7;
+    animation: ambientFloat 22s ease-in-out infinite;
+}
+
+.ambient-orb.one {
+    width: 420px;
+    height: 420px;
+    top: -120px;
+    left: -120px;
+    background: radial-gradient(circle, var(--pastel-1), transparent 70%);
+}
+
+.ambient-orb.two {
+    width: 360px;
+    height: 360px;
+    top: 26%;
+    right: -120px;
+    background: radial-gradient(circle, var(--pastel-2), transparent 72%);
+    animation-delay: -8s;
+}
+
+.ambient-orb.three {
+    width: 520px;
+    height: 520px;
+    bottom: -220px;
+    left: 34%;
+    background: radial-gradient(circle, var(--pastel-3), transparent 70%);
+    animation-delay: -14s;
+}
+
+@keyframes ambientFloat {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(0, -24px, 0) scale(1.04); }
+    100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+
+.container {
+    max-width: min(1720px, calc(100% - 20px));
+    padding: 18px;
+    gap: 22px;
+    position: relative;
+    z-index: 1;
+}
+
+.sidebar {
+    width: 300px;
+    top: 18px;
+    height: calc(100vh - 36px);
+    margin-right: 0;
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    background: linear-gradient(145deg, var(--surface-panel-start), var(--surface-panel-end));
+    backdrop-filter: blur(16px);
+    box-shadow: 0 24px 60px -24px var(--shadow-color);
+}
+
+.sidebar-header {
+    font-family: var(--font-display);
+    font-size: 1.95rem;
+    letter-spacing: -0.03em;
+}
+
+.sidebar-subheader {
+    letter-spacing: 0.22em;
+    font-size: 0.72rem;
+}
+
+#searchInput {
+    border-radius: 14px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+.sidebar nav a {
+    border: 1px solid transparent;
+    border-radius: 12px;
+    color: var(--text-primary);
+    opacity: 0.95;
+    font-size: 0.98rem;
+    font-weight: 600;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.sidebar nav a:hover {
+    transform: translateX(4px);
+    border-color: var(--glass-border);
+    background: rgba(255, 255, 255, 0.04);
+    opacity: 1;
+}
+
+.sidebar nav a.active {
+    background: linear-gradient(120deg, #c6a36b, #a9814c);
+    opacity: 1;
+    box-shadow: 0 10px 25px -14px rgba(200, 164, 106, 0.55);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.doc-hero {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 20px;
+    padding: clamp(24px, 3.5vw, 44px);
+    border-radius: 30px;
+    border: 1px solid var(--glass-border);
+    background:
+        linear-gradient(135deg, rgba(21, 31, 52, 0.84), rgba(11, 17, 31, 0.72)),
+        radial-gradient(420px 240px at 80% 10%, rgba(200, 164, 106, 0.22), transparent 65%),
+        radial-gradient(360px 240px at 10% 100%, rgba(95, 114, 140, 0.2), transparent 70%);
+    box-shadow: 0 38px 80px -44px var(--shadow-color);
+    isolation: isolate;
+}
+
+.doc-hero::after {
+    content: "";
+    position: absolute;
+    inset: auto -20% -48% auto;
+    width: 72%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(121, 138, 166, 0.2), transparent 70%);
+    filter: blur(4px);
+    z-index: -1;
+}
+
+.hero-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--accent-gold);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.hero-title {
+    margin-top: 14px;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.3vw, 3.7rem);
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+    color: var(--text-headings);
+    text-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+.hero-title em {
+    font-family: var(--font-editorial);
+    font-style: normal;
+    font-weight: 600;
+    color: var(--accent-gold);
+}
+
+.hero-lead {
+    margin-top: 14px;
+    max-width: 68ch;
+    color: var(--text-primary);
+    opacity: 0.92;
+    font-size: clamp(1.01rem, 1.28vw, 1.12rem);
+    line-height: 1.75;
+}
+
+.hero-facts {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.hero-fact {
+    padding: 9px 13px;
+    border-radius: 11px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-primary);
+    font-size: 0.86rem;
+    font-weight: 600;
+}
+
+.hero-actions {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.hero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    padding: 11px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.06);
+    font-weight: 700;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.hero-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-gold-faded);
+}
+
+.hero-btn.primary {
+    background: linear-gradient(120deg, #c6a36b, #a9814c);
+    color: #fff;
+}
+
+.hero-canvas {
+    position: relative;
+    min-height: 320px;
+    perspective: 1000px;
+}
+
+.hero-orbit {
+    position: absolute;
+    width: min(320px, 85%);
+    aspect-ratio: 1;
+    inset: 48% auto auto 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 1px solid rgba(200, 164, 106, 0.3);
+    box-shadow: inset 0 0 70px rgba(111, 128, 154, 0.2), 0 14px 38px rgba(0, 0, 0, 0.3);
+}
+
+.hero-orbit::before {
+    content: "";
+    position: absolute;
+    inset: 14%;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-floating {
+    position: absolute;
+    width: clamp(130px, 38%, 190px);
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+    background: linear-gradient(155deg, rgba(18, 30, 54, 0.93), rgba(11, 17, 33, 0.75));
+    box-shadow: 0 20px 45px -28px rgba(0, 0, 0, 0.7);
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease;
+    overflow: hidden;
+}
+
+.hero-floating h4 {
+    font-family: var(--font-display);
+    font-size: 0.88rem;
+    color: var(--text-headings);
+    margin: 0;
+}
+
+.hero-floating p {
+    margin-top: 5px;
+    color: var(--text-primary);
+    opacity: 0.9;
+    font-size: 0.86rem;
+}
+
+.hero-floating .inner {
+    padding: 14px;
+}
+
+.hero-floating.left { top: 8%; left: 2%; transform: rotateY(15deg) rotateX(5deg); }
+.hero-floating.right { top: 54%; right: 2%; transform: rotateY(-16deg) rotateX(4deg); }
+.hero-floating.bottom { bottom: 2%; left: 24%; transform: rotateY(9deg) rotateX(-3deg); }
+
+.doc-tilt {
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease;
+}
+
+.samples-lead {
+    margin-bottom: 16px;
+    color: var(--text-primary);
+    opacity: 0.92;
+    font-size: 1.01rem;
+    line-height: 1.7;
+    max-width: 70ch;
+}
+
+.sample-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.sample-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 170px;
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+    background:
+        radial-gradient(220px 140px at 85% 10%, rgba(200, 164, 106, 0.2), transparent 70%),
+        linear-gradient(145deg, rgba(20, 30, 50, 0.92), rgba(11, 17, 32, 0.74));
+    box-shadow: 0 20px 40px -26px var(--shadow-color);
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease, filter 0.35s ease;
+    transform-style: preserve-3d;
+}
+
+.sample-card:hover {
+    transform: translateY(-4px) rotateX(1.2deg);
+    box-shadow: 0 30px 50px -34px var(--shadow-color);
+}
+
+.sample-card .inner {
+    position: relative;
+    z-index: 1;
+    padding: 16px;
+}
+
+.sample-card h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--text-headings);
+}
+
+.sample-card p {
+    margin-top: 8px;
+    color: var(--text-primary);
+    opacity: 0.9;
+    font-size: 0.92rem;
+}
+
+.sample-preview {
+    position: absolute;
+    right: -12px;
+    bottom: -18px;
+    width: 140px;
+    aspect-ratio: 1;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.02));
+    transform: rotate(-14deg);
+}
+
+.sample-card.is-active {
+    border-color: rgba(200, 164, 106, 0.5);
+    box-shadow: 0 30px 56px -34px rgba(0, 0, 0, 0.68);
+    filter: saturate(1.08);
+}
+
+html.light-mode .doc-hero {
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(244, 249, 255, 0.95)),
+        radial-gradient(420px 240px at 80% 10%, rgba(196, 160, 106, 0.24), transparent 65%),
+        radial-gradient(360px 240px at 10% 100%, rgba(176, 214, 255, 0.26), transparent 70%);
+}
+
+html.light-mode .doc-hero::after {
+    background: radial-gradient(circle, rgba(176, 214, 255, 0.26), transparent 70%);
+}
+
+html.light-mode .hero-title,
+html.light-mode .hero-floating h4 {
+    color: #0f172a;
+    text-shadow: none;
+}
+
+html.light-mode .hero-lead,
+html.light-mode .hero-floating p {
+    color: #1e293b;
+}
+
+html.light-mode .hero-kicker,
+html.light-mode .hero-fact,
+html.light-mode .hero-btn {
+    background: rgba(255, 255, 255, 0.86);
+    color: #0f172a;
+}
+
+html.light-mode .hero-floating {
+    background: linear-gradient(155deg, rgba(255, 255, 255, 0.96), rgba(243, 248, 255, 0.86));
+}
+
+html.light-mode .sample-card,
+html.light-mode .frontend-preview {
+    background:
+        radial-gradient(220px 140px at 85% 10%, rgba(196, 160, 106, 0.2), transparent 70%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(244, 249, 255, 0.9));
+}
+
+html.light-mode .sample-card p,
+html.light-mode .frontend-preview-content p,
+html.light-mode .frontend-step p {
+    color: #1e293b;
+}
+
+.scroll-story .hero-copy,
+.scroll-story .hero-orbit,
+.scroll-story .hero-floating {
+    will-change: transform;
+}
+
+.content p,
+.content li,
+.content td,
+.content th {
+    color: var(--text-primary);
+}
+
+.content p,
+.content li {
+    font-size: clamp(0.98rem, 1.07vw, 1.04rem);
+    line-height: 1.72;
+}
+
+.details-content p,
+.details-content li,
+.details-content td {
+    color: var(--text-primary);
+    opacity: 0.96;
+}
+
+.frontend-intro {
+    margin: -10px 0 18px;
+    font-size: 1.03rem;
+    color: var(--text-primary);
+    opacity: 0.95;
+}
+
+.frontend-story {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.92fr) minmax(0, 1.08fr);
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.frontend-story-sticky {
+    position: sticky;
+    top: 22px;
+    align-self: start;
+}
+
+.frontend-preview {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    border: 1px solid var(--glass-border);
+    background:
+        radial-gradient(320px 180px at 90% 12%, rgba(196, 160, 106, 0.24), transparent 70%),
+        linear-gradient(145deg, rgba(18, 28, 47, 0.9), rgba(9, 16, 31, 0.78));
+    box-shadow: 0 24px 48px -28px var(--shadow-color);
+    padding: 16px;
+    transition: transform 0.35s ease, border-color 0.35s ease;
+    transform-style: preserve-3d;
+}
+
+.frontend-preview::before {
+    content: "";
+    position: absolute;
+    inset: -35% auto auto -20%;
+    width: 180px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(132, 151, 180, 0.34), transparent 68%);
+    pointer-events: none;
+}
+
+.frontend-preview-header {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--glass-border);
+    font-size: 0.86rem;
+}
+
+.frontend-preview-header strong {
+    color: var(--text-headings);
+    letter-spacing: 0.02em;
+}
+
+.frontend-preview-header span {
+    color: var(--accent-gold);
+    font-weight: 700;
+}
+
+.frontend-stage {
+    position: relative;
+    z-index: 1;
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 16px;
+    min-height: 260px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 12px;
+}
+
+.preview-watch {
+    width: 112px;
+    height: 112px;
+    border-radius: 999px;
+    margin: 0 auto;
+    background:
+        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.82), rgba(196, 160, 106, 0.2) 38%, rgba(0, 0, 0, 0.2) 75%),
+        linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.2));
+    border: 2px solid rgba(196, 160, 106, 0.42);
+    box-shadow: inset 0 0 0 8px rgba(15, 22, 37, 0.65), 0 10px 30px -14px rgba(0, 0, 0, 0.65);
+    transition: transform 0.45s ease;
+}
+
+.frontend-preview-content h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.06rem;
+    color: var(--text-headings);
+}
+
+.frontend-preview-content p {
+    margin-top: 8px;
+    color: var(--text-primary);
+    opacity: 0.92;
+    font-size: 0.93rem;
+}
+
+.frontend-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.frontend-pills span {
+    font-size: 0.76rem;
+    font-weight: 700;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    padding: 5px 10px;
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.frontend-preview-actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.frontend-preview-actions a {
+    text-decoration: none;
+    font-size: 0.82rem;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+    padding: 8px 10px;
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.frontend-preview-actions a.primary {
+    background: linear-gradient(120deg, #c6a36b, #a9814c);
+    color: #fff;
+}
+
+.frontend-preview[data-state="catalog"] .frontend-stage {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(120, 135, 159, 0.08));
+}
+
+.frontend-preview[data-state="catalog"] .preview-watch {
+    border-color: rgba(145, 165, 193, 0.46);
+}
+
+.frontend-preview[data-state="product"] .frontend-stage {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), rgba(196, 160, 106, 0.08));
+}
+
+.frontend-preview[data-state="product"] .preview-watch {
+    border-color: rgba(196, 160, 106, 0.58);
+}
+
+.frontend-preview[data-state="checkout"] .frontend-stage {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), rgba(122, 196, 155, 0.08));
+}
+
+.frontend-preview[data-state="checkout"] .preview-watch {
+    border-color: rgba(122, 196, 155, 0.52);
+}
+
+.frontend-story-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.frontend-step {
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 14px;
+    background: linear-gradient(150deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+}
+
+.frontend-step h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--text-headings);
+}
+
+.frontend-step p {
+    margin-top: 8px;
+    color: var(--text-primary);
+    opacity: 0.92;
+    font-size: 0.92rem;
+}
+
+.frontend-step.is-active {
+    border-color: rgba(196, 160, 106, 0.56);
+    transform: translateY(-2px);
+    box-shadow: 0 18px 36px -24px var(--shadow-color);
+}
+
+.frontend-step:hover {
+    transform: translateY(-3px);
+    border-color: rgba(196, 160, 106, 0.4);
+}
+
+.sample-output {
+    margin-top: 14px;
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.sample-output h4 {
+    margin: 0 0 8px;
+    color: var(--accent-gold);
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.sample-lines {
+    display: grid;
+    gap: 8px;
+}
+
+.sample-lines span {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 9px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 0.88rem;
+    color: var(--text-primary);
+}
+
+main.content > section {
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: clamp(22px, 2vw, 34px);
+    background:
+        linear-gradient(150deg, var(--surface-section-start), var(--surface-section-end)),
+        radial-gradient(520px 240px at 82% -20%, rgba(196, 160, 106, 0.14), transparent 72%);
+    box-shadow: 0 24px 55px -32px var(--shadow-color), 0 1px 0 rgba(255, 255, 255, 0.35) inset;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+main.content > section:hover {
+    transform: translateY(-3px);
+    border-color: rgba(196, 160, 106, 0.35);
+    box-shadow: 0 36px 70px -38px var(--shadow-color), 0 1px 0 rgba(255, 255, 255, 0.45) inset;
+}
+
+.content h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 2.6vw, 2.8rem);
+    letter-spacing: -0.03em;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.info-card {
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+    background: linear-gradient(150deg, var(--surface-card-start), var(--surface-card-end));
+    box-shadow: 0 12px 28px -18px var(--shadow-color);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 34px -24px var(--shadow-color);
+}
+
+.info-card h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+}
+
+details {
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+    background: linear-gradient(145deg, var(--surface-card-start), var(--surface-card-end));
+    box-shadow: 0 14px 30px -24px var(--shadow-color);
+    transform: translateY(0);
+}
+
+details:hover {
+    transform: translateY(-2px);
+    border-color: rgba(200, 164, 106, 0.32);
+}
+
+.details-content {
+    background: var(--details-bg);
+    border-top: 1px solid var(--glass-border);
+}
+
+.media-container {
+    border-color: rgba(200, 164, 106, 0.36);
+    border-radius: 16px;
+}
+
+table {
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+table tr:hover td {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.team-card {
+    width: auto;
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 14px;
+    background: linear-gradient(160deg, var(--surface-card-start), var(--surface-card-end));
+    box-shadow: 0 16px 32px -22px var(--shadow-color);
+}
+
+.team-avatar {
+    border: 2px solid rgba(200, 164, 106, 0.44);
+    box-shadow: 0 14px 24px -16px rgba(0, 0, 0, 0.6);
+}
+
+#team-progress {
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    background: linear-gradient(140deg, var(--surface-section-start), var(--surface-section-end));
+}
+
+.toggle-btn,
+.upload-container button,
+#saveEditBtn {
+    border: 1px solid rgba(200, 164, 106, 0.42);
+}
+
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0;
+    z-index: 1200;
+    background: linear-gradient(90deg, #8093b0, #c8a46a);
+    box-shadow: 0 0 16px rgba(128, 147, 176, 0.45);
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 1150px) {
+    .doc-hero {
+        grid-template-columns: 1fr;
+    }
+    .sample-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .frontend-story {
+        grid-template-columns: 1fr;
+    }
+    .frontend-story-sticky {
+        position: static;
+    }
+}
+
+@media (max-width: 900px) {
+    .container {
+        padding: 10px;
+    }
+    .sidebar {
+        height: auto;
+    }
+    .sample-grid {
+        grid-template-columns: 1fr;
+    }
+    .frontend-stage {
+        min-height: 0;
+    }
+    .frontend-preview-actions {
+        flex-direction: column;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div id="scrollProgress" class="scroll-progress"></div>
+    <div class="ambient-orbs" aria-hidden="true">
+        <span class="ambient-orb one"></span>
+        <span class="ambient-orb two"></span>
+        <span class="ambient-orb three"></span>
+    </div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                
+                <img src="/zura/global/zura.ico" alt="ZURA" style="height: 50px; display: block; margin-bottom: 10px;">
+                 <span>Documentation</span>
+            </div>
+            <p class="sidebar-subheader">ISDMS Project</p>
+            <input type="text" id="searchInput" placeholder="Search features...">
+            <nav>
+                <a href="#doc-story" class="active"><span class="material-icons-outlined">motion_photos_on</span> Story Intro</a>
+                <a href="#design-samples"><span class="material-icons-outlined">palette</span> Experience Samples</a>
+                <a href="#overview"><span class="material-icons-outlined">info</span> Overview</a>
+                <a href="#team"><span class="material-icons-outlined">groups</span> Development Team</a>
+                <a href="#database"><span class="material-icons-outlined">storage</span> Database Schema</a>
+                <a href="#core-ui"><span class="material-icons-outlined">design_services</span> Core Frontend & UI</a>
+                <a href="#auth"><span class="material-icons-outlined">security</span> Authentication</a>
+                <a href="#ecommerce"><span class="material-icons-outlined">shopping_bag</span> E-Commerce</a>
+                <a href="#customer-support"><span class="material-icons-outlined">support_agent</span> Customer Support</a>
+                <a href="#admin-panel"><span class="material-icons-outlined">admin_panel_settings</span> Admin Panel</a>
+                <a href="#backend"><span class="material-icons-outlined">dns</span> Backend & System</a>
+                <a href="#known-issues"><span class="material-icons-outlined">bug_report</span> Known Issues</a>
+                <a href="#troubleshooting"><span class="material-icons-outlined">build</span> Troubleshooting</a>
+                <a href="#faq"><span class="material-icons-outlined">quiz</span> FAQ</a>
+                <a href="#changelog"><span class="material-icons-outlined">history</span> Version History</a>
+            </nav>
+            <button class="download-btn" onclick="window.print()"><span class="material-icons-outlined">picture_as_pdf</span> Download PDF</button>
+            <div class="theme-toggle">
+                <span>Dark Mode</span>
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </aside>
+
+	        <main class="content">
+            <section class="doc-hero reveal scroll-story" id="doc-story">
+                <div class="hero-copy">
+                    <span class="hero-kicker"><span class="material-icons-outlined" style="font-size:16px;">auto_awesome</span> Project Story</span>
+                    <h1 class="hero-title">A clear guide to how <em>ZURA</em> works, from user flow to admin control.</h1>
+                    <p class="hero-lead">
+                        This page explains the system in simple steps.
+                        You can read features, flow, and updates without digging through code.
+                    </p>
+                    <div class="hero-facts">
+                        <span class="hero-fact">Frontend and Backend</span>
+                        <span class="hero-fact">Admin and User Flows</span>
+                        <span class="hero-fact">Security Notes</span>
+                    </div>
+                    <div class="hero-actions">
+                        <a class="hero-btn primary" href="#overview"><span class="material-icons-outlined" style="font-size:18px;">explore</span> Start the Story</a>
+                        <a class="hero-btn" href="#changelog"><span class="material-icons-outlined" style="font-size:18px;">history</span> View Timeline</a>
+                    </div>
+                </div>
+                <div class="hero-canvas">
+                    <div class="hero-orbit"></div>
+                    <article class="hero-floating left doc-tilt">
+                        <div class="inner">
+                            <h4>Experience Layer</h4>
+                            <p>Homepage flow with smoother motion and better reading focus.</p>
+                        </div>
+                    </article>
+                    <article class="hero-floating right doc-tilt">
+                        <div class="inner">
+                            <h4>Control Layer</h4>
+                            <p>Admin tools for homepage setup, content edits, and layout control.</p>
+                        </div>
+                    </article>
+                    <article class="hero-floating bottom doc-tilt">
+                        <div class="inner">
+                            <h4>Trust Layer</h4>
+                            <p>Safer moderation flow and stronger request validation.</p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+            <section id="design-samples">
+                <h2>Experience Samples</h2>
+                <p class="samples-lead">
+                    These sample blocks show clear design directions you can reuse.
+                    They are simple references for launch pages, feature stories, and admin-focused sections.
+                </p>
+                <div class="sample-grid">
+                    <article class="sample-card doc-tilt">
+                        <div class="inner">
+                            <h3>Sample 01: Launch Hero</h3>
+                            <p>Clean headline, clear CTA buttons, and focused product highlight.</p>
+                        </div>
+                        <span class="sample-preview" aria-hidden="true"></span>
+                    </article>
+                    <article class="sample-card doc-tilt">
+                        <div class="inner">
+                            <h3>Sample 02: Step Story</h3>
+                            <p>Scroll sections that explain flow, logic, and key decisions one step at a time.</p>
+                        </div>
+                        <span class="sample-preview" aria-hidden="true"></span>
+                    </article>
+                    <article class="sample-card doc-tilt">
+                        <div class="inner">
+                            <h3>Sample 03: Admin Control</h3>
+                            <p>Fast settings panels made for quick updates and reliable operations.</p>
+                        </div>
+                        <span class="sample-preview" aria-hidden="true"></span>
+                    </article>
+                </div>
+            </section>
+            <section id="overview">
+                <h2>About Our Project (ZURA)</h2>
+                <div class="info-card">
+                    <h3><span class="material-icons-outlined">lightbulb</span> Why We Built This</h3>
+                    <p>We created the <strong>ZURA E-Commerce Platform</strong> to make online shopping easier, more secure, and more enjoyable. Our goal is to build a system that looks modern and works smoothly for both customers and administrators. The platform handles everything from product listings and order management to customer support and real-time communication.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3><span class="material-icons-outlined">slideshow</span> Project Presentation</h3>
+                    <p>Watch our presentation deck below.</p>
+                    <div class="media-container" style="padding-top: 56.25%; position: relative; height: 0; overflow: hidden;">
+                        <iframe loading="lazy" 
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                            src="https://www.canva.com/design/DAG_7kISlyo/moXP2kf301zxtEMZKBeuKg/view?embed" 
+                            allowfullscreen="allowfullscreen" 
+                            allow="fullscreen">
+                        </iframe>
+                    </div>
+                    <div style="text-align: center; margin-top: 12px; font-family: 'Cormorant Garamond', serif; letter-spacing: 0.5px;">
+                        <a href="https://www.canva.com/design/DAG_7kISlyo/moXP2kf301zxtEMZKBeuKg/view?utm_content=DAG_7kISlyo&utm_campaign=designshare&utm_medium=embeds&utm_source=link" target="_blank" rel="noopener" style="color: var(--accent-gold); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.3s;">Zura Presentation</a> <span style="color: var(--text-secondary); font-size: 0.9em;">by Kirbs Gaming</span>
+                    </div>
+                </div>
+
+                <h3>System Flow & Architecture</h3>
+                <p style="margin-bottom: 15px; color: var(--text-secondary);">Here is a simple view of how our system is organized and how the checkout process works.</p>
+                
+                <div class="mermaid">
+                graph TD
+                    subgraph "Frontend (User)"
+                        UI[Web Pages]
+                        JS[Our Scripts]
+                    end
+                    subgraph "Backend (Server)"
+                        PHP[PHP Logic]
+                        API[API Handlers]
+                    end
+                    subgraph "Data"
+                        DB[(Database)]
+                    end
+                    UI --> PHP
+                    JS --> API
+                    PHP --> DB
+                    API --> DB
+                </div>
+
+                <div class="mermaid">
+                graph LR
+                    A[Browse Shop] --> B(Add to Cart)
+                    B --> C{Checkout}
+                    C --> D[Shipping Info]
+                    D --> E[Payment]
+                    E --> F[Review Order]
+                    F --> G(Place Order)
+                    G --> H[Success Page]
+                </div>
+
+                <div class="info-card">
+                    <h3><span class="material-icons-outlined">watch</span> What We Sell</h3>
+                    <p>ZURA is all about premium watches. The system supports:</p>
+                    <ul>
+                        <li><strong>Luxury Brands:</strong> <del>Rolex, Casio, Fossil, Like Patek Philippe and Omega.</del> Will be update soon...</li>
+                        <li><strong>Different Types:</strong> Automatic, Analog, Digital, and Smart watches.</li>
+                        <li><strong>For Everyone:</strong> Men's, Women's, and Unisex styles.</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3><span class="material-icons-outlined">school</span> For Our Class</h3>
+                    <p>This project is for Our <strong>Deployment Maintenance and Services (DMS)</strong> class. It shows how We use databases to store products, users, and orders securely and efficiently.</p>
+                </div>
+            </section>
+
+         <section id="team">
+    <h2>Our Team</h2>
+    <div class="team-grid">
+        <div class="team-card" data-id="kirbs">
+            <div class="team-avatar">K</div>
+            <input type="file" accept="image/*" class="avatar-upload">
+            <button class="avatar-delete">✕</button>
+            <h4>Kirbs Dimagiba</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">Project Manager | Lead Developer</p>
+        </div>
+        <div class="team-card" data-id="jeje">
+            <div class="team-avatar">J</div>
+            <input type="file" accept="image/*" class="avatar-upload">
+            <button class="avatar-delete">✕</button>
+            <h4>Jeje Joson</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">Developer | Sales & Marketing</p>
+        </div>
+        <div class="team-card" data-id="sofa">
+            <div class="team-avatar">S</div>
+            <input type="file" accept="image/*" class="avatar-upload">
+            <button class="avatar-delete">✕</button>
+            <h4>Sofa Perez</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">Technical Writer | Sales & Marketing</p>
+        </div>
+        <div class="team-card" data-id="alvin">
+            <div class="team-avatar">A</div>
+            <input type="file" accept="image/*" class="avatar-upload">
+            <button class="avatar-delete">✕</button>
+            <h4>Alvin Aldaba</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">Model | Tester</p>
+        </div>
+        <div class="team-card" data-id="denmark">
+            <div class="team-avatar">D</div>
+            <input type="file" accept="image/*" class="avatar-upload">
+            <button class="avatar-delete">✕</button>
+            <h4>Denmark Vibal</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">Model | Tester</p>
+        </div>
+    </div>
+</section>
+
+<style>
+
+</style>
+
+<script>
+
+</script>
+
+            <section id="team-progress">
+    <h2>Team Progress & Documentation</h2>
+
+    <button id="toggleUpload" class="toggle-btn">
+        <span class="material-icons-outlined">add_photo_alternate</span> Upload Images
+    </button>
+
+    <div class="upload-container" id="uploadContainer">
+        <input type="file" id="imageUpload" multiple accept="image/*">
+        <textarea id="imageDoc" placeholder="Add description/documentation for selected images"></textarea>
+        <button id="addImageBtn">Add to Gallery</button>
+    </div>
+
+    <div class="team-gallery" id="teamGallery"></div>
+</section>
+
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <h3>Edit Documentation</h3>
+        <textarea id="editTextarea"></textarea>
+        <div class="modal-buttons">
+            <button id="saveEditBtn">Save</button>
+            <button id="cancelEditBtn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<style>
+
+</style>
+
+<script>
+
+</script>
+
+
+            <section id="database">
+                <h2>Database Schema</h2>
+                <div class="info-card">
+                    <h3><span class="material-icons-outlined">table_chart</span> Tables & Columns</h3>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                            <thead>
+                                <tr style="background: var(--bg-color); text-align: left;">
+                                    <th style="padding: 12px; border-bottom: 1px solid var(--border-color);">Table Name</th>
+                                    <th style="padding: 12px; border-bottom: 1px solid var(--border-color);">Columns</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">admins</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, username, password, role, name, created_at</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">ad_stats</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">ad_id, clicks, last_clicked</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">brands</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, name, image, banner, description, display_order</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">categories</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, name</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">chat_messages</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, user_id, message, sender, staff_name, attachment, is_read, created_at</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">coupons</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, code, discount_type, discount_value, min_spend, expiry_date, status, created_at</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">notifications</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, title, message, link, type, image, created_at</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">orders</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, user_id, customer, email, address, city, zip, billing_address, billing_city, billing_zip, total, status, shipping_method, payment_method, request_invoice, order_notes, latitude, longitude, created_at</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">order_items</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, order_id, product_id, quantity, price, variant_info</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">products</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, name, brand_id, category_id, watch_type, gender, price, original_price, stock, rating, description, strap_type, strap_color, key_features, tech_specs, detailed_features</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">product_images</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, product_id, image, is_primary</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">product_variants</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, product_id, variant_group, name, price_modifier, image</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">restock_notifications</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, product_id, email, created_at</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">reviews</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, product_id, user_id, rating, comment, rating_quality, rating_fit, rating_delivery, order_id, is_edited, created_at</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">review_images</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, review_id, image</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">site_settings</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">setting_key, setting_value</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">theme_presets</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, name, settings, created_at</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">users</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, name, email, phone, birthday, password, status, address, city, zip, address_type, google_id, facebook_id, cart_data, admin_typing_at, notes, created_at</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--accent-gold);">wishlist</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem;">id, user_id, product_id, created_at</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="core-ui">
+                <h2>1. Frontend Experience</h2>
+                <p class="frontend-intro">
+                    This part shows what users really see on your website: homepage story flow, product browsing, and product actions.
+                    The preview on the left updates while you scroll the steps.
+                </p>
+
+                <div class="frontend-story" id="frontendStory">
+                    <div class="frontend-story-sticky">
+                        <div class="frontend-preview" id="frontendPreview" data-state="hero">
+                            <div class="frontend-preview-header">
+                                <strong>ZURA Live Frontend</strong>
+                                <span>Interactive Preview</span>
+                            </div>
+                            <div class="frontend-stage">
+                                <div class="preview-watch" id="previewWatch"></div>
+                                <div class="frontend-preview-content">
+                                    <h3 id="previewTitle">Homepage Story Hero</h3>
+                                    <p id="previewText">Large headline, focused watch visual, and smooth chapter-style scrolling.</p>
+                                    <div class="frontend-pills">
+                                        <span id="previewPillA">Hero Layer</span>
+                                        <span id="previewPillB">Scroll Motion</span>
+                                    </div>
+                                </div>
+                                <div class="frontend-preview-actions">
+                                    <a href="index.php" class="primary">Open Home</a>
+                                    <a href="shop.php">Open Shop</a>
+                                    <a href="admin/settings.php">Open Admin Settings</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="frontend-story-steps">
+                        <article class="frontend-step is-active" data-step="hero">
+                            <h3>Step 1: Story Hero</h3>
+                            <p>The homepage opens with your watch-focused hero and smooth intro transitions.</p>
+                        </article>
+                        <article class="frontend-step" data-step="catalog">
+                            <h3>Step 2: Product Discovery</h3>
+                            <p>Users browse watches with clean filters, quick search, and clear product cards.</p>
+                        </article>
+                        <article class="frontend-step" data-step="product">
+                            <h3>Step 3: Product Detail</h3>
+                            <p>Users select variants, view features, then add to cart or open support chat.</p>
+                        </article>
+                        <article class="frontend-step" data-step="checkout">
+                            <h3>Step 4: Cart to Checkout</h3>
+                            <p>Checkout flow moves from shipping to payment to review in simple guided steps.</p>
+                        </article>
+                    </div>
+                </div>
+
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">palette</span> Theme and Visual State</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> Loads the saved theme and applies it instantly for users.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>assets/js/main.js</code>, <code>assets/css/style.css</code></li>
+                            <li><strong>Result:</strong> Cleaner reading, consistent contrast, and stable appearance across pages.</li>
+                        </ul>
+                        <pre><code>const THEME_KEY = "zura_public_theme";
+const saved = localStorage.getItem(THEME_KEY) || "light";
+document.documentElement.dataset.theme = saved;
+
+function setTheme(nextTheme) {
+  document.documentElement.dataset.theme = nextTheme;
+  localStorage.setItem(THEME_KEY, nextTheme);
+}</code></pre>
+                        <div class="sample-output">
+                            <h4>Sample Output</h4>
+                            <div class="sample-lines">
+                                <span>Theme loaded: light</span>
+                                <span>Navbar, cards, and buttons use matching palette</span>
+                                <span>User preference saved for next visit</span>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">search</span> Shop Search and Filters</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> Updates products quickly while user types or changes filters.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>shop.php</code>, <code>assets/js/main.js</code></li>
+                            <li><strong>Result:</strong> Faster browsing and easier product discovery.</li>
+                        </ul>
+                        <pre><code>const input = document.getElementById("search");
+let timer = null;
+
+input.addEventListener("input", () => {
+  clearTimeout(timer);
+  timer = setTimeout(() => loadProducts({ q: input.value.trim() }), 220);
+});
+
+function loadProducts(params) {
+  // fetch and render product cards
+}</code></pre>
+                        <div class="sample-output">
+                            <h4>Sample Output</h4>
+                            <div class="sample-lines">
+                                <span>Search: "chrono" -> 12 matching watches</span>
+                                <span>Filter: Brand=Omega, Type=Automatic</span>
+                                <span>Grid refreshes without full page reload</span>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">watch</span> Product Detail Actions</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> Handles variant changes, price updates, and add-to-cart action.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>product.php</code>, <code>assets/js/main.js</code></li>
+                            <li><strong>Result:</strong> Users can choose options and buy with fewer clicks.</li>
+                        </ul>
+                        <pre><code>function onVariantSelect(variant) {
+  document.getElementById("price").textContent = variant.finalPrice;
+  document.getElementById("stock").textContent = variant.stockText;
+  document.getElementById("mainImage").src = variant.image;
+}
+
+document.getElementById("addToCartBtn").addEventListener("click", addCurrentProductToCart);</code></pre>
+                        <div class="sample-output">
+                            <h4>Sample Output</h4>
+                            <div class="sample-lines">
+                                <span>Variant changed: Brown Leather Strap</span>
+                                <span>Price updated instantly</span>
+                                <span>Item added to cart: 1x ZURA Chronograph</span>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">animation</span> Scroll Motion and Micro-Interactions</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> Adds subtle movement on scroll and hover for a premium feel.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>index.php</code>, <code>assets/js/main.js</code></li>
+                            <li><strong>Result:</strong> Storytelling sections feel alive without being distracting.</li>
+                        </ul>
+                        <pre><code>window.addEventListener("scroll", () => {
+  const y = window.scrollY;
+  heroImage.style.transform = `rotate(${y * 0.06}deg) scale(${1 + y * 0.00008})`;
+});
+
+card.addEventListener("pointermove", tiltCard);</code></pre>
+                        <div class="sample-output">
+                            <h4>Sample Output</h4>
+                            <div class="sample-lines">
+                                <span>Hero watch rotates slowly during scroll</span>
+                                <span>Cards tilt softly on pointer move</span>
+                                <span>Sections fade in with controlled timing</span>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <section id="auth">
+                <h2>2. Users & Login</h2>
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">vpn_key</span> Logging In</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> Lets users sign up and log in securely.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>auth.php</code>, <code>otp.php</code>, <code>google-login.php</code>, <code>facebook-login.php</code></li>
+                            <li><strong>Features:</strong> Login with Email/Password, Google, Facebook, or OTP (One-Time Password) sent to their phone.</li>
+                        </ul>
+                        <pre><code><span class="code-keyword">if</span> (<span class="code-function">isset</span>(<span class="code-variable">$_POST</span>[<span class="code-string">'login'</span>])) {
+    <span class="code-variable">$email</span> = <span class="code-variable">$conn</span>-><span class="code-function">real_escape_string</span>(<span class="code-variable">$_POST</span>[<span class="code-string">'email'</span>]);
+    <span class="code-variable">$password</span> = <span class="code-variable">$_POST</span>[<span class="code-string">'password'</span>];
+    
+    <span class="code-variable">$res</span> = <span class="code-variable">$conn</span>-><span class="code-function">query</span>(<span class="code-string">"SELECT * FROM users WHERE email='$email'"</span>);
+    <span class="code-keyword">if</span> (<span class="code-variable">$res</span>->num_rows > <span class="code-number">0</span>) {
+        <span class="code-variable">$row</span> = <span class="code-variable">$res</span>-><span class="code-function">fetch_assoc</span>();
+        <span class="code-keyword">if</span> (<span class="code-function">password_verify</span>(<span class="code-variable">$password</span>, <span class="code-variable">$row</span>[<span class="code-string">'password'</span>])) {
+        }
+    }
+}</code></pre>
+                    </div>
+                </details>
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">person</span> Our Profile</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> A place for users to see their past orders, update their info, and check their wishlist.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>profile.php</code>, <code>orders.php</code></li>
+                            <li><strong>Features:</strong> Change password, view order status, and write reviews for products they bought.</li>
+                        </ul>
+                    </div>
+                </details>
+            </section>
+
+            
+
+            <section id="ecommerce">
+                <h2>3. Shopping Features</h2>
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">storefront</span> The Shop</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> Displays all the watches in a grid.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>shop.php</code></li>
+                            <li><strong>Features:</strong> You can filter by brand, price, or category. You can also click "Load More" to see more items without reloading the page.</li>
+                        </ul>
+                        <div class="media-container">
+                            <img src="https://via.placeholder.com/800x400/111827/c5a059?text=ZURA+Shop+Interface" alt="Shop Interface">
+                            <div class="media-caption">The ZURA Shop Interface</div>
+                        </div>
+                    </div>
+                </details>
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">watch</span> Product Page</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> Shows all the details about a specific watch.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>product.php</code></li>
+                            <li><strong>Features:</strong> Big images, video previews, choose colors/straps, and a button to ask about the product in chat.</li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">shopping_cart</span> Cart & Checkout</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> Handles the buying process.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>cart.php</code>, <code>checkout.php</code></li>
+                            <li><strong>Features:</strong> Saves your cart so it's there when you come back. The checkout has 3 easy steps: Shipping, Payment, and Review. You can even pin your location on a map.</li>
+                        </ul>
+                    </div>
+                </details>
+            </section>
+
+            <section id="customer-support">
+                <h2>4. Support & Chat</h2>
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">chat</span> Live Chat</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> A chat box that sits at the bottom of the screen.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>main.js</code>, <code>chat_api.php</code>, <code>admin/messages.php</code></li>
+                            <li><strong>Features:</strong> Starts with a Bot for quick answers. If needed, it switches to a real person (me/admin). Supports sending images.</li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">favorite</span> Wishlist</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> Lets users save items they like for later.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>wishlist.php</code>, <code>main.js</code></li>
+                            <li><strong>Features:</strong> Adds items without reloading the page. Also remembers what you recently looked at.</li>
+                        </ul>
+                    </div>
+                </details>
+            </section>
+
+            <section id="admin-panel">
+                <h2>5. Admin Dashboard</h2>
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">settings</span> Site Settings</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> Lets me change how the site looks and works without touching code.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>admin/settings.php</code></li>
+                            <li><strong>Features:</strong> I can change the homepage banners, create coupons, and turn on maintenance mode.</li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">inventory_2</span> Managing Products</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> Where I add new watches and manage orders.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>admin/products.php</code>, <code>admin/orders.php</code>, etc.</li>
+                            <li><strong>Features:</strong> Add/Edit/Delete products. View orders and change their status (like "Shipped").</li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">analytics</span> Analytics</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> Shows me how the business is doing.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>admin/dashboard.php</code></li>
+                            <li><strong>Features:</strong> Charts showing sales, lists of top products, and alerts for low stock.</li>
+                        </ul>
+                        <div class="media-container">
+                            <img src="https://via.placeholder.com/800x400/111827/c5a059?text=Admin+Analytics+Dashboard" alt="Admin Dashboard">
+                            <div class="media-caption">Real-time Analytics Dashboard</div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <section id="backend">
+                <h2>6. Behind the Scenes</h2>
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">storage</span> Database Setup</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> Connects to the database and makes sure all tables exist.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>includes/db.php</code></li>
+                            <li><strong>Features:</strong> Automatically creates tables if they are missing, so the site doesn't crash.</li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">email</span> Sending Emails</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> Sends emails for order confirmations and invoices.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>includes/GmailMailer.php</code></li>
+                            <li><strong>Features:</strong> Uses Gmail to send nice HTML emails to customers.</li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">trending_up</span> Tracking Clicks</div></summary>
+                    <div class="details-content">
+                        <p><strong>What it does:</strong> Counts how many times people click on ads.</p>
+                        <ul>
+                            <li><strong>Key Files:</strong> <code>track_ad.php</code>, <code>fx.js</code></li>
+                            <li><strong>How it works:</strong> Sends a quiet signal to the server when an ad is clicked.</li>
+                        </ul>
+                    </div>
+                </details>
+            </section>
+
+            <section id="known-issues">
+                <h2>Known Issues</h2>
+                <div class="info-card">
+                    <h3><span class="material-icons-outlined">warning</span> Current Limitations</h3>
+                    <ul>
+                        <li><strong>Facebook Login:</strong> Currently unavailable due to pending API verification.</li>
+                        <li><strong>Map API:</strong> Location pinning uses OpenStreetMap (Leaflet) as Google Maps API key is not configured.</li>
+                        <li><strong>Email Delivery:</strong> SMTP settings are configured for development; production requires valid credentials.</li>
+                    </ul>
+                    <h3 style="margin-top: 20px;"><span class="material-icons-outlined">check_circle</span> Recently Resolved</h3>
+                    <ul>
+                        <li><strong>Video Upload:</strong> Fixed issue where videos failed to upload in product galleries.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="troubleshooting">
+                <h2>Troubleshooting Guide</h2>
+                <div class="info-card">
+                    <h3><span class="material-icons-outlined">build</span> Common Solutions</h3>
+                    <details>
+                        <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">dns</span> Database Connection Failed</div></summary>
+                        <div class="details-content">
+                            <p><strong>Error:</strong> "Connection failed: Access denied for user..."</p>
+                            <p><strong>Solution:</strong> Open <code>includes/db.php</code> and verify your MySQL username and password. Ensure XAMPP MySQL service is running.</p>
+                        </div>
+                    </details>
+                    <details>
+                        <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">mark_email_read</span> Emails Not Sending</div></summary>
+                        <div class="details-content">
+                            <p><strong>Error:</strong> "SMTP Error: Could not connect to SMTP host."</p>
+                            <p><strong>Solution:</strong> Check <code>includes/GmailMailer.php</code>. Ensure you are using a valid Google App Password, not your regular Gmail password. Verify port 465 is open.</p>
+                        </div>
+                    </details>
+                    <details>
+                        <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">image_not_supported</span> Images Not Loading</div></summary>
+                        <div class="details-content">
+                            <p><strong>Issue:</strong> Product images appear broken.</p>
+                            <p><strong>Solution:</strong> Ensure the <code>assets/images/</code> directory exists and has read permissions. Check if the image filename in the database matches the actual file (case-sensitive on Linux).</p>
+                        </div>
+                    </details>
+                    <details>
+                        <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">lock_clock</span> Session/Login Issues</div></summary>
+                        <div class="details-content">
+                            <p><strong>Issue:</strong> User is logged out immediately after logging in.</p>
+                            <p><strong>Solution:</strong> Check <code>php.ini</code> for <code>session.save_path</code>. Ensure the directory is writable. Clear browser cookies and try again.</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="faq">
+                <h2>Frequently Asked Questions</h2>
+                <div class="info-card">
+                    <h3><span class="material-icons-outlined">quiz</span> Common User Queries</h3>
+                    <details>
+                        <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">local_shipping</span> How do I track my order?</div></summary>
+                        <div class="details-content">
+                            <p>You can track your order by going to your <strong>Profile > My Orders</strong>. Alternatively, you can use the <strong>Chat Widget</strong> and select "Track Order" for a quick status update.</p>
+                        </div>
+                    </details>
+                    <details>
+                        <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">payments</span> What payment methods do you accept?</div></summary>
+                        <div class="details-content">
+                            <p>We currently accept <strong>Cash on Delivery (COD)</strong>, <strong>GCash</strong> (up to ₱100k limit), and major <strong>Credit/Debit Cards</strong>.</p>
+                        </div>
+                    </details>
+                    <details>
+                        <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">assignment_return</span> What is your return policy?</div></summary>
+                        <div class="details-content">
+                            <p>We offer a 7-day return policy for items that are defective or damaged upon delivery. Please contact our support team via the live chat to initiate a return.</p>
+                        </div>
+                    </details>
+                    <details>
+                        <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">verified</span> Do products come with a warranty?</div></summary>
+                        <div class="details-content">
+                            <p>Yes, all our luxury timepieces come with a standard <strong>2-Year International Warranty</strong> covering movement and manufacturing defects.</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="changelog">
+                <h2>Version History & Patch Notes</h2>
+                <div class="info-card">
+                    <h3><span class="material-icons-outlined">history</span> Project Timeline</h3>
+                    
+                    <details open>
+                        <summary><div class="summary-title"><span class="material-icons-outlined" style="color: var(--accent-gold);">auto_awesome</span> v1.4 - The UI/UX Overhaul <span class="version-tag">Latest</span></div></summary>
+                        <div class="details-content">
+                            <p><strong>Released:</strong> February 02, 2026</p>
+                            <p>Comprehensive overhaul of the website's UI/UX to enhance modernity and luxury appeal. Introduced significant features for both users and administrators, with a focus on security and performance optimization.</p>
+                            
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-marker"></div>
+                                    <details open>
+                                        <summary><div class="summary-title"><span class="time-badge">Interface</span> Major UI Changes</div></summary>
+                                        <div class="details-content">
+                                            <ul>
+                                                <li><strong>Mega Menu:</strong> Implemented full-width Mega Menu on the Home Page for improved navigation.</li>
+                                                <li><strong>Product Grid:</strong> Updated shop layout to display 2 columns per row for enhanced visual presentation.</li>
+                                                <li><strong>Profile Pages:</strong> Redesigned User Profile, Settings, and Wishlist pages with a modern layout. Fixed menu overlapping issues.</li>
+                                                <li><strong>Login/Register:</strong> Refactored authentication UI and logic; updated to a cleaner modal design.</li>
+                                                <li><strong>Admin Navigation:</strong> Resolved navigation inconsistencies; relocated Messages and Reviews for better accessibility. Added Report navigation.</li>
+                                                <li><strong>Modals:</strong> Updated Terms and Conditions and other system modals.</li>
+                                            </ul>
+                                        </div>
+                                    </details>
+                                </div>
+
+                                <div class="timeline-item">
+                                    <div class="timeline-marker"></div>
+                                    <details>
+                                        <summary><div class="summary-title"><span class="time-badge">Features</span> New Tools for Users</div></summary>
+                                        <div class="details-content">
+                                            <ul>
+                                                <li><strong>Loyalty Program:</strong> Implemented Loyalty Points system for purchases.</li>
+                                                <li><strong>Journal Page:</strong> Added Journal/Article section.</li>
+                                                <li><strong>Map Location Pinning:</strong> Integrated Map API for address pinning and automatic address filling during checkout.</li>
+                                                <li><strong>Currency Converter:</strong> Added currency dropdown with configurable rates via Admin Settings.</li>
+                                                <li><strong>Product Filtering:</strong> Added sort options for Newest, Oldest, and Price.</li>
+                                                <li><strong>Accessibility Options:</strong> Added preferences for High Contrast, Reduced Motion, Disable Animations, and Custom Cursor.</li>
+                                                <li><strong>GDPR Compliance:</strong> Added functionality to export and download personal data.</li>
+                                                <li><strong>Theme:</strong> Moved Dark Mode toggle to Profile Settings.</li>
+                                            </ul>
+                                        </div>
+                                    </details>
+                                </div>
+
+                                <div class="timeline-item">
+                                    <div class="timeline-marker"></div>
+                                    <details>
+                                        <summary><div class="summary-title"><span class="time-badge">System</span> Under the Hood</div></summary>
+                                        <div class="details-content">
+                                            <ul>
+                                                <li><strong>Security (CSRF):</strong> Implemented CSRF token protection on all forms to prevent unauthorized actions.</li>
+                                                <li><strong>Performance:</strong> Integrated central image processor for automatic WebP conversion of uploads.</li>
+                                                <li><strong>Admin Logging:</strong> Added activity logging for administrator actions.</li>
+                                            </ul>
+                                        </div>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary><div class="summary-title"><span class="material-icons-outlined">upgrade</span> v1.3 - The Feature Upgrade</div></summary>
+                        <div class="details-content">
+                            <p><strong>Released:</strong> January 23, 2026</p>
+                            <p>Major update introducing the chat system, homepage builder, and enhanced authentication methods.</p>
+                            <ul>
+                                <li><strong>Live Chat:</strong> Integrated Chatbot and Admin Live Agent system for real-time communication.</li>
+                                <li><strong>Homepage Builder:</strong> Enabled full Home Page content customization via Admin Panel.</li>
+                                <li><strong>Ratings & Reviews:</strong> Implemented product rating and review system.</li>
+                                <li><strong>Authentication:</strong> Integrated Google Login and OTP (One-Time Password) Login. Upgraded account creation flow.</li>
+                                <li><strong>Security Features:</strong> Added Password Change and Account Deletion functionality.</li>
+                                <li><strong>UI:</strong> Added custom cursor.</li>
+                                <li><strong>Known Issue:</strong> Identified stability issues on Admin Index page.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary><div class="summary-title"><span class="material-icons-outlined">update</span> v1.2 - Expansion</div></summary>
+                        <div class="details-content">
+                            <p><strong>Released:</strong> January 18, 2026</p>
+                            <p>Focused on UI improvements and Admin Panel expansion.</p>
+                            <ul>
+                                <li><strong>Admin Charts:</strong> Added Sales Overview and Order Status Overview widgets to Dashboard.</li>
+                                <li><strong>Modal UI:</strong> Converted Login and Register pages to modal-based interface.</li>
+                                <li><strong>Checkout Process:</strong> Streamlined Checkout and Cart into a 3-step flow.</li>
+                                <li><strong>Homepage UI:</strong> Updated Home Page layout and design.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary><div class="summary-title"><span class="material-icons-outlined">flag</span> v1.1 - Fresh Start</div></summary>
+                        <div class="details-content">
+                            <p><strong>Released:</strong> January 2026</p>
+                            <p>Initial release of ZURA with essential e-commerce functionalities.</p>
+                            <h5>Admin Side:</h5>
+                            <ul>
+                                <li>Implemented Admin Login and Dashboard with key statistics.</li>
+                                <li>Added Product Management (Add, Edit, Delete, Search, Filter).</li>
+                                <li>Added Order Management list.</li>
+                            </ul>
+                            <h5>Customer Side:</h5>
+                            <ul>
+                                <li>Implemented User Registration and Login.</li>
+                                <li>Created Home Page, Product List, and Product Detail pages.</li>
+                                <li>Implemented Shopping Cart and Checkout functionality.</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- UPCOMING PATCH -->
+<details>
+    <summary>
+        <div class="summary-title">
+            <span class="material-icons-outlined" style="color: var(--accent-gold);">schedule</span>
+            Upcoming Update - BIG Update Coming Soon!
+        </div>
+    </summary>
+    <div class="details-content">
+        <p><strong>Status:</strong> Planning and Build Phase</p>
+        <p>This release is focused on homepage immersion, stronger admin editing tools, mobile polish, and security hardening.</p>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <details>
+                    <summary><div class="summary-title"><span class="time-badge">New Features</span> Planned Scope</div></summary>
+                    <div class="details-content">
+                        <ul>
+                            <li><strong>Homepage Story Engine:</strong> Sticky chapter flow, smoother section progression, and refined parallax/3D motion.</li>
+                            <li><strong>Visual Hero Designer Upgrade:</strong> Better layer tools, slide controls, transition presets, text/image effects, and timeline editing.</li>
+                            <li><strong>Admin Homepage Flow Builder 2.0:</strong> Cleaner ordering, expandable section controls, and improved navigation for large homepage setups.</li>
+                            <li><strong>User Moderation Center:</strong> Better warning/banned workflows, reason templates, and compliance tracking visibility.</li>
+                            <li><strong>PWA Enhancements:</strong> Install/update flow polish and better app-like behavior on mobile.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <details>
+                    <summary><div class="summary-title"><span class="time-badge">Quality and Security</span> Stability Goals</div></summary>
+                    <div class="details-content">
+                        <ul>
+                            <li><strong>Security Pass:</strong> Full sanitization and validation audit for chat, admin actions, and dynamic rendering paths.</li>
+                            <li><strong>Responsive Pass:</strong> Improved spacing, typography, and touch interactions for small and mid-size devices.</li>
+                            <li><strong>Performance Pass:</strong> Lower animation cost on entry-level devices and fallback behavior for reduced motion.</li>
+                            <li><strong>Brand Compliance Cleanup:</strong> Continue replacing sensitive branding with fictional/demo-safe assets.</li>
+                        </ul>
+                        <p><em>Note:</em> Timeline may shift based on QA results and compatibility testing.</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
+</details>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Theme Management ---
+            const themeToggle = document.getElementById('themeToggle');
+            const THEME_KEY = 'zura_docs_theme';
+            const THEME_INIT_KEY = 'zura_docs_theme_init_v1';
+
+            function applyTheme() {
+                if (!localStorage.getItem(THEME_INIT_KEY)) {
+                    localStorage.setItem(THEME_KEY, 'light');
+                    localStorage.setItem(THEME_INIT_KEY, '1');
+                }
+                const savedTheme = localStorage.getItem(THEME_KEY);
+                if (savedTheme === 'dark') {
+                    document.documentElement.classList.remove('light-mode');
+                    themeToggle.checked = true;
+                } else {
+                    document.documentElement.classList.add('light-mode');
+                    themeToggle.checked = false;
+                }
+            }
+
+            themeToggle.addEventListener('change', function () {
+                if (this.checked) {
+                    document.documentElement.classList.remove('light-mode');
+                    localStorage.setItem(THEME_KEY, 'dark');
+                } else {
+                    document.documentElement.classList.add('light-mode');
+                    localStorage.setItem(THEME_KEY, 'light');
+                }
+            });
+
+            applyTheme();
+
+            const searchInput = document.getElementById('searchInput');
+            const allSections = document.querySelectorAll('section');
+            const allDetails = document.querySelectorAll('details');
+
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase().trim();
+
+                if (!query) {
+                    allSections.forEach(el => el.style.display = '');
+                    allDetails.forEach(el => el.style.display = '');
+                    return;
+                }
+
+                allSections.forEach(el => el.style.display = 'none');
+                allDetails.forEach(el => el.style.display = 'none');
+
+                allDetails.forEach(detail => {
+                    const summary = detail.querySelector('summary');
+                    const summaryText = summary ? summary.textContent.toLowerCase() : '';
+                    const fullText = detail.textContent.toLowerCase();
+
+                    if (summaryText.includes(query)) {
+                        detail.style.display = '';
+                        detail.setAttribute('open', 'true');
+                        showAncestors(detail);
+                        detail.querySelectorAll('details').forEach(d => d.style.display = '');
+                    } else if (fullText.includes(query)) {
+                        detail.style.display = '';
+                        detail.setAttribute('open', 'true');
+                        showAncestors(detail);
+                    }
+                });
+
+                allSections.forEach(section => {
+                    if (section.style.display === 'none' && section.textContent.toLowerCase().includes(query)) {
+                        section.style.display = '';
+                    }
+                });
+            });
+
+            function showAncestors(el) {
+                let parent = el.parentElement;
+                while (parent) {
+                    if (parent.tagName === 'DETAILS' || parent.tagName === 'SECTION') {
+                        parent.style.display = '';
+                        if (parent.tagName === 'DETAILS') parent.setAttribute('open', 'true');
+                    }
+                    parent = parent.parentElement;
+                }
+            }
+
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.sidebar nav a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.scrollY >= (sectionTop - 150)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            document.querySelectorAll('pre').forEach(pre => {
+                const code = pre.querySelector('code');
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'copy-btn';
+                copyBtn.textContent = 'Copy';
+                pre.appendChild(copyBtn);
+
+                copyBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(code.innerText).then(() => {
+                        copyBtn.textContent = 'Copied!';
+                        setTimeout(() => {
+                            copyBtn.textContent = 'Copy';
+                        }, 2000);
+                    });
+                });
+            });
+
+            document.querySelectorAll('code').forEach(block => {
+                let html = block.innerHTML;
+                html = html.replace(/\b(const|let|var|function|if|else|return|new|class|public|static|void)\b/g, '<span class="code-keyword">$1</span>');
+                html = html.replace(/(".*?"|'.*?')/g, '<span class="code-string">$1</span>');
+                html = html.replace(/(\w+)\(/g, '<span class="code-function">$1</span>(');
+                html = html.replace(/(\$\w+)/g, '<span class="code-variable">$1</span>');
+                html = html.replace(/\b(\d+)\b/g, '<span class="code-number">$1</span>');
+                block.innerHTML = html;
+            });
+
+            const progressBar = document.getElementById('scrollProgress');
+            const updateProgress = () => {
+                const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+                const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+                const percent = Math.min(100, (scrollTop / scrollable) * 100);
+                if (progressBar) progressBar.style.width = percent + '%';
+            };
+
+            const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+            const storySection = document.getElementById('doc-story');
+            const storyCopy = storySection ? storySection.querySelector('.hero-copy') : null;
+            const storyOrbit = storySection ? storySection.querySelector('.hero-orbit') : null;
+            const storyFloating = storySection ? storySection.querySelectorAll('.hero-floating') : [];
+            const sampleCards = document.querySelectorAll('#design-samples .sample-card');
+            const frontendPreview = document.getElementById('frontendPreview');
+            const frontendSteps = document.querySelectorAll('#frontendStory .frontend-step');
+            const previewWatch = document.getElementById('previewWatch');
+            const previewTitle = document.getElementById('previewTitle');
+            const previewText = document.getElementById('previewText');
+            const previewPillA = document.getElementById('previewPillA');
+            const previewPillB = document.getElementById('previewPillB');
+            const frontendStateMap = {
+                hero: {
+                    title: 'Homepage Story Hero',
+                    text: 'Large headline, focused watch visual, and smooth chapter-style scrolling.',
+                    pillA: 'Hero Layer',
+                    pillB: 'Scroll Motion'
+                },
+                catalog: {
+                    title: 'Product Discovery Grid',
+                    text: 'Clean card layout with search and filters for quick browsing.',
+                    pillA: 'Filters',
+                    pillB: 'Live Search'
+                },
+                product: {
+                    title: 'Product Detail Focus',
+                    text: 'Variant selection, price update, and direct add-to-cart actions.',
+                    pillA: 'Variants',
+                    pillB: 'Quick Buy'
+                },
+                checkout: {
+                    title: 'Checkout Completion',
+                    text: 'Guided steps from shipping to payment to order review.',
+                    pillA: '3-Step Flow',
+                    pillB: 'Conversion Focus'
+                }
+            };
+
+            const setFrontendState = (stepKey) => {
+                const next = frontendStateMap[stepKey];
+                if (!next) return;
+
+                frontendSteps.forEach((step) => {
+                    step.classList.toggle('is-active', step.dataset.step === stepKey);
+                });
+
+                if (previewTitle) previewTitle.textContent = next.title;
+                if (previewText) previewText.textContent = next.text;
+                if (previewPillA) previewPillA.textContent = next.pillA;
+                if (previewPillB) previewPillB.textContent = next.pillB;
+                if (frontendPreview) frontendPreview.dataset.state = stepKey;
+            };
+
+            const updateStoryMotion = () => {
+                if (storySection) {
+                    const rect = storySection.getBoundingClientRect();
+                    const vh = window.innerHeight || 1;
+                    const progress = clamp((vh - rect.top) / (vh + rect.height), 0, 1);
+                    const depth = (progress - 0.5) * 2;
+
+                    if (storyCopy) {
+                        storyCopy.style.transform = `translate3d(0, ${(-18 * depth).toFixed(2)}px, 0)`;
+                    }
+
+                    if (storyOrbit) {
+                        const orbitScale = 1 + (progress * 0.06);
+                        storyOrbit.style.transform = `translate(-50%, -50%) rotate(${(progress * 180).toFixed(2)}deg) scale(${orbitScale.toFixed(3)})`;
+                    }
+
+                    const spreadMap = [-1, 1, 0.4];
+                    storyFloating.forEach((card, index) => {
+                        const spread = spreadMap[index] ?? 0;
+                        const translateY = depth * 16 * (index === 2 ? 1.3 : 1);
+                        const rotateY = (spread * 11) + (depth * spread * 7);
+                        const rotateX = depth * 4;
+                        card.style.transform = `translate3d(0, ${translateY.toFixed(2)}px, 0) rotateY(${rotateY.toFixed(2)}deg) rotateX(${rotateX.toFixed(2)}deg)`;
+                    });
+                }
+
+                sampleCards.forEach((card) => {
+                    const rect = card.getBoundingClientRect();
+                    const vh = window.innerHeight || 1;
+                    const cardCenter = rect.top + (rect.height / 2);
+                    const distance = Math.abs((vh / 2) - cardCenter);
+                    const normalized = clamp(1 - (distance / (vh * 0.9)), 0, 1);
+                    const lift = (1 - normalized) * 14;
+                    const scale = 0.97 + (normalized * 0.05);
+                    card.style.transform = `translate3d(0, ${lift.toFixed(2)}px, 0) scale(${scale.toFixed(3)})`;
+                    card.classList.toggle('is-active', normalized > 0.67);
+                });
+
+                if (frontendPreview) {
+                    const rect = frontendPreview.getBoundingClientRect();
+                    const vh = window.innerHeight || 1;
+                    const progress = clamp((vh - rect.top) / (vh + rect.height), 0, 1);
+                    const depth = (progress - 0.5) * 2;
+                    frontendPreview.style.transform = `translate3d(0, ${(-depth * 7).toFixed(2)}px, 0)`;
+                    if (previewWatch) {
+                        previewWatch.style.transform = `rotate(${(depth * 10).toFixed(2)}deg) scale(${(1 + (progress * 0.035)).toFixed(3)})`;
+                    }
+                }
+            };
+
+            setFrontendState('hero');
+            updateProgress();
+            updateStoryMotion();
+            window.addEventListener('scroll', updateProgress, { passive: true });
+            window.addEventListener('scroll', updateStoryMotion, { passive: true });
+            window.addEventListener('resize', updateStoryMotion);
+
+            if (frontendSteps.length) {
+                const frontendObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting && entry.intersectionRatio >= 0.55) {
+                            const stepKey = entry.target.dataset.step;
+                            setFrontendState(stepKey);
+                        }
+                    });
+                }, { threshold: [0.55, 0.75], rootMargin: '-10% 0px -28% 0px' });
+                frontendSteps.forEach((step) => frontendObserver.observe(step));
+
+                frontendSteps.forEach((step) => {
+                    step.addEventListener('click', () => {
+                        setFrontendState(step.dataset.step);
+                    });
+                });
+            }
+
+            const revealNodes = document.querySelectorAll('main.content > section, .info-card, .timeline-item, details');
+            revealNodes.forEach((node) => node.classList.add('reveal'));
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                    }
+                });
+            }, { threshold: 0.14 });
+            revealNodes.forEach((node) => revealObserver.observe(node));
+
+            document.querySelectorAll('#design-samples .doc-tilt').forEach((card) => {
+                card.addEventListener('pointermove', (event) => {
+                    const rect = card.getBoundingClientRect();
+                    const px = (event.clientX - rect.left) / rect.width;
+                    const py = (event.clientY - rect.top) / rect.height;
+                    const rx = (0.5 - py) * 12;
+                    const ry = (px - 0.5) * 14;
+                    card.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateZ(2px)`;
+                });
+                card.addEventListener('pointerleave', () => {
+                    card.style.transform = '';
+                });
+            });
+        });
+
+
+        document.querySelectorAll('.team-card').forEach(card=>{
+    const id = card.dataset.id;
+    const avatar = card.querySelector('.team-avatar');
+    const upload = card.querySelector('.avatar-upload');
+    const delBtn = card.querySelector('.avatar-delete');
+    const letter = avatar.textContent.trim()[0];
+
+    function loadSaved() {
+        const saved = localStorage.getItem('avatar_'+id);
+        avatar.innerHTML = saved ? `<img src="${saved}">` : letter;
+    }
+
+    loadSaved();
+
+    avatar.addEventListener('click', ()=>upload.click());
+
+    upload.addEventListener('change', e=>{
+        const file = e.target.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = ev=>{
+                localStorage.setItem('avatar_'+id, ev.target.result);
+                loadSaved();
+            };
+            reader.readAsDataURL(file);
+        }
+        upload.value = '';
+    });
+
+    delBtn.addEventListener('click', e=>{
+        e.stopPropagation();
+        localStorage.removeItem('avatar_'+id);
+        loadSaved();
+    });
+});
+
+
+const gallery = document.getElementById('teamGallery');
+const STORAGE_KEY = 'teamProgressGallery';
+const editModal = document.getElementById('editModal');
+const editTextarea = document.getElementById('editTextarea');
+let currentEditItem = null;
+
+function loadGallery() {
+    const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    savedData.forEach(item => createTeamItem(item.src, item.doc, false));
+}
+function saveGallery() {
+    const data = Array.from(gallery.querySelectorAll('.team-item')).map(div => ({
+        src: div.querySelector('img').src,
+        doc: div.querySelector('.overlay').innerText
+    }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+function createTeamItem(imgSrc, docText, save=true) {
+    const div = document.createElement('div');
+    div.className = 'team-item';
+    div.innerHTML = `
+        <img src="${imgSrc}" alt="Team Image">
+        <div class="overlay">${docText || "No documentation provided."}</div>
+        <div class="item-controls">
+            <button class="edit-btn">Edit</button>
+            <button class="delete-btn">Delete</button>
+        </div>
+    `;
+    div.querySelector('.delete-btn').addEventListener('click', () => {
+        if(confirm("Delete this image?")) { div.remove(); saveGallery(); }
+    });
+    div.querySelector('.edit-btn').addEventListener('click', () => {
+        currentEditItem = div;
+        editTextarea.value = div.querySelector('.overlay').innerText;
+        editModal.style.display = 'flex';
+    });
+    gallery.prepend(div);
+    if(save) saveGallery();
+}
+
+document.getElementById('addImageBtn').addEventListener('click', () => {
+    const input = document.getElementById('imageUpload');
+    const doc = document.getElementById('imageDoc').value.trim();
+    if (!input.files.length) return alert("Select images first!");
+    Array.from(input.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => createTeamItem(e.target.result, doc);
+        reader.readAsDataURL(file);
+    });
+    input.value = '';
+    document.getElementById('imageDoc').value = '';
+});
+
+document.getElementById('saveEditBtn').addEventListener('click', () => {
+    if(currentEditItem) {
+        currentEditItem.querySelector('.overlay').innerText = editTextarea.value.trim() || "No documentation provided.";
+        saveGallery();
+        editModal.style.display = 'none';
+        currentEditItem = null;
+    }
+});
+
+document.getElementById('cancelEditBtn').addEventListener('click', () => {
+    editModal.style.display = 'none';
+    currentEditItem = null;
+});
+
+editModal.addEventListener('click', (e) => {
+    if(e.target === editModal) { editModal.style.display = 'none'; currentEditItem = null; }
+});
+
+loadGallery();
+
+const toggleBtn = document.getElementById('toggleUpload');
+const uploadContainer = document.getElementById('uploadContainer');
+toggleBtn.addEventListener('click', () => {
+    uploadContainer.style.display = uploadContainer.style.display === 'flex' ? 'none' : 'flex';
+});
+    </script>
+
+</body>
+</html>
